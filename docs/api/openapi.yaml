@@ -1,0 +1,216 @@
+openapi: '3.0.2'
+info:
+  title: OICD open card
+  version: '1.0.0'
+  description: |
+    Application for checking the card state and validity
+    # Error codes
+
+    ### Description of codes for `422 Unprocessable entity` responses
+
+    | Code | Description |
+    |---|---|
+    | U4000 | User already exists. |
+    | U4001 | Invalid email. |
+    | U4002 | Invalid password. Password must contain minimum eight characters, must have at least one uppercase letter, one lowercase letter and one number. |
+
+servers:
+  - url: '/'
+
+paths:
+  /api/v1/sessions:
+    post:
+      operationId: createSession
+      summary: Login user and obtain a JWT token
+      tags:
+        - Sessions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: john@doe.com
+                    passwd:
+                      type: string
+                      example: myPassword
+                  required: ['name', 'passwd']
+              required: ['user']
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: 'caeb2a6a-bd1d-41cc-bfdf-5d4514ace591'
+                required: ['token']
+        '400':
+          $ref: '#/components/responses/BadRequestErrorResponse'
+        '401':
+          $ref: '#/components/responses/NotAuthenticatedErrorResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundErrorResponse'
+  /api/v1/users:
+    post:
+      operationId: createUser
+      summary: Create a new user
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: 'john@doe.com'
+                    passwd:
+                      type: string
+                      example: 'myPassword'
+                  required: ['name', 'passwd']
+              required: ['user']
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: 'caeb2a6a-bd1d-41cc-bfdf-5d4514ace591'
+                required: ['token']
+        '400':
+          $ref: '#/components/responses/BadRequestErrorResponse'
+        '422':
+          description: Invalid data
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/U4000'
+                  - $ref: '#/components/schemas/U4001'
+                  - $ref: '#/components/schemas/U4002'
+  /api/v1/cards/{cardNumber}:checkCardState:
+    get:
+      operationId: checkCardState
+      summary: Check the state and validity of the card
+      security:
+       - bearer: []
+      tags:
+        - Card
+      parameters:
+        - name: cardNumber
+          in: path
+          description: Unique card number.
+          schema:
+            type: string
+            example: 'asdf123456'
+          required: true
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  card:
+                    type: object
+                    properties:
+                      validUntil:
+                        type: string
+                        format: Date
+                      state:
+                        type: string
+                        example: 'valid'
+        '400':
+          $ref: '#/components/responses/BadRequestErrorResponse'
+        '401':
+          $ref: '#/components/responses/NotAuthenticatedErrorResponse'
+        '403':
+          $ref: '#/components/responses/UnauthorizedErrorResponse'
+components:
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    HttpError:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: number
+        errorCode:
+          type: string
+        errorData:
+          type: object
+          properties:
+            message:
+              type: string
+            code:
+              type: string
+        errorClass:
+          type: string
+        stack:
+          type: string
+    U4000:
+      type: object
+      properties:
+        code:
+          type: string
+          example: U4000
+    U4001:
+      type: object
+      properties:
+        code:
+          type: string
+          example: U4001
+    U4002:
+      type: object
+      properties:
+        code:
+          type: string
+          example: U4002
+  responses:
+    UnauthorizedErrorResponse:
+      description: Unauthorized access
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpError'
+    NotAuthenticatedErrorResponse:
+      description: Unauthorized access
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpError'
+    BadRequestErrorResponse:
+      description: 'Request not processed - bad_request'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpError'
+    NotFoundErrorResponse:
+      description: 'Entity not found - not_found'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpError'
