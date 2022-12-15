@@ -1,4 +1,4 @@
-# STFU and click application
+# OICD open card
 
 find the 📝 API documentation [here](./docs/api/openapi.yaml) written in swagger
 
