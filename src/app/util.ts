@@ -41,8 +41,13 @@ export const checkPassword = async (param: {
   }
 }
 
-// Password validation RegEx -> Minimum eight characters, at least one uppercase letter, one lowercase letter and one number
+// Password validation RegEx -> Minimum eight characters, at least one uppercase letter, one lowercase letter, at least one number and no special character
 const PASSWD_REGEX_VALIDATION = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
 
 export const validatePassword = (password: string) =>
   PASSWD_REGEX_VALIDATION.test(password)
+
+const INTEGER_REGEX_VALIDATION = /^[0-9]*$/
+
+export const validateIntegerNumber = (numberForValidation: number) =>
+  INTEGER_REGEX_VALIDATION.test(String(numberForValidation))
