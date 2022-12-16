@@ -1,6 +1,7 @@
 import * as express from 'express'
 import * as ctrl from './app/controllers'
 import * as userService from './app/services/userService'
+import * as cardService from './app/services/cardService'
 import * as OpenApiValidator from 'express-openapi-validator'
 import logger from './app/logger'
 import httpErrorResponder from './app/controllers/httpErrorResponder'
@@ -19,6 +20,10 @@ server.use(validator)
 server.all('/', ctrl.httpRootHandler)
 server.post('/api/v1/users', ctrl.service(userService.handlePostUser))
 server.post('/api/v1/sessions', ctrl.service(userService.handlePostSession))
+server.get(
+  '/api/v1/cards/:cardNumber[:]checkCardState',
+  ctrl.service(cardService.handleGetCardState)
+)
 
 server.use(httpErrorResponder)
 server.use(ctrl.httpFinalHandler)
