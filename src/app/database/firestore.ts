@@ -13,7 +13,9 @@ const getFirestoreForEmulator = () => {
 
 // For tests and emulator usage, use Firestore emulator without specifying SA key
 const firestore =
-  config.enableTests || config.firebase.isFirestoreEmaulator
+  config.enableTests ||
+  (config.firebase.isFirestoreEmaulator &&
+    config.server.nodeEnv === 'development')
     ? getFirestoreForEmulator()
     : firebase
         .initializeApp({

@@ -12,7 +12,9 @@ info:
     |---|---|
     | U4000 | User already exists. |
     | U4001 | Invalid email. |
-    | U4002 | Invalid password. Password must contain minimum eight characters, must have at least one uppercase letter, one lowercase letter and one number. |
+    | U4002 | Invalid password. Password must contain minimum eight characters, must have at least one uppercase letter, one lowercase letter, at least one number and no special character. |
+    | C4000 | Invalid card number. Card number must be integer. |
+    | C5000 | Open card service unavailable. |
 
 servers:
   - url: '/'
@@ -118,8 +120,8 @@ paths:
           in: path
           description: Unique card number.
           schema:
-            type: string
-            example: 'asdf123456'
+            type: number
+            example: 10932482038
           required: true
       responses:
         '200':
@@ -144,6 +146,16 @@ paths:
           $ref: '#/components/responses/NotAuthenticatedErrorResponse'
         '403':
           $ref: '#/components/responses/UnauthorizedErrorResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundErrorResponse'
+        '422':
+          description: Invalid data
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/C4000'
+                  - $ref: '#/components/schemas/C5000'
 components:
   securitySchemes:
     bearer:
@@ -189,6 +201,18 @@ components:
         code:
           type: string
           example: U4002
+    C4000:
+      type: object
+      properties:
+        code:
+          type: string
+          example: C4000
+    C5000:
+      type: object
+      properties:
+        code:
+          type: string
+          example: C5000
   responses:
     UnauthorizedErrorResponse:
       description: Unauthorized access

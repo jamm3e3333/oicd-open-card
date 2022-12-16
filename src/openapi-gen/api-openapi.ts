@@ -40,6 +40,14 @@ export interface components {
       /** @example U4002 */
       code?: string;
     };
+    C4000: {
+      /** @example C4000 */
+      code?: string;
+    };
+    C5000: {
+      /** @example C5000 */
+      code?: string;
+    };
   };
   responses: {
     /** Unauthorized access */
@@ -136,7 +144,7 @@ export interface operations {
     parameters: {
       path: {
         /** Unique card number. */
-        cardNumber: string;
+        cardNumber: number;
       };
     };
     responses: {
@@ -156,6 +164,14 @@ export interface operations {
       400: components["responses"]["BadRequestErrorResponse"];
       401: components["responses"]["NotAuthenticatedErrorResponse"];
       403: components["responses"]["UnauthorizedErrorResponse"];
+      404: components["responses"]["NotFoundErrorResponse"];
+      /** Invalid data */
+      422: {
+        content: {
+          "application/json": Partial<components["schemas"]["C4000"]> &
+            Partial<components["schemas"]["C5000"]>;
+        };
+      };
     };
   };
 }
