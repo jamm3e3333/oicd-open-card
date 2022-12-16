@@ -2,13 +2,16 @@ import * as express from 'express'
 import * as ctrl from './app/controllers'
 import * as userService from './app/services/userService'
 import * as cardService from './app/services/cardService'
+import * as swaggerUi from 'swagger-ui-express'
+const oasJsonDoc = require('../docs/api/generated/openapi.json')
+
 import * as OpenApiValidator from 'express-openapi-validator'
 import logger from './app/logger'
 import httpErrorResponder from './app/controllers/httpErrorResponder'
 
 const validator = OpenApiValidator.middleware({
   apiSpec: './docs/api/openapi.yaml',
-  ignorePaths: /\/{1}$/,
+  ignorePaths: /(\/{1}$)|(\/api\/v1\/docs)/,
 })
 
 const server = express()
@@ -24,6 +27,8 @@ server.get(
   '/api/v1/cards/:cardNumber[:]checkCardState',
   ctrl.service(cardService.handleGetCardState)
 )
+server.use('/api/v1/docs', swaggerUi.serve)
+server.get('/api/v1/docs', swaggerUi.setup(oasJsonDoc))
 
 server.use(httpErrorResponder)
 server.use(ctrl.httpFinalHandler)

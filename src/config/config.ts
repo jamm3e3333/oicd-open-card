@@ -24,7 +24,7 @@ const configSchema = {
     isFirestoreEmaulator: loader.bool('IS_FIRESTORE_EMULATOR_USE'),
   },
   openCard: {
-    apiKey: loader.string('OPEN_CARD_API_KEY'),
+    apiKey: loader.string.hidden('OPEN_CARD_API_KEY'),
     baseUrl: loader.string('OPEN_CARD_BASE_URL'),
   },
 }

@@ -1,6 +1,6 @@
 openapi: '3.0.2'
 info:
-  title: OICD open card
+  title: 'OICD open card'
   version: '1.0.0'
   description: |
     Application for checking the card state and validity
