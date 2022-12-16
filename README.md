@@ -26,7 +26,7 @@ To overwrite the default config, create a valid json file from `.env.json`, rewr
 E.g.
 
 ```json
-// This is a example of dotenv-api.json file
+// This is an example of dotenv-api.json file
 {
   "NODE_ENV": "development",
   "JWT_SECRET": "asdfj3lkfajs0f9jq",
