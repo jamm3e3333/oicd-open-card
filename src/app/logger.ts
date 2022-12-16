@@ -6,3 +6,5 @@ let baseLogger = logger({
 })
 
 export default baseLogger
+
+export const openCardLogger = baseLogger('.openCard')
