@@ -196,7 +196,7 @@
           "bearer" : [ ]
         } ],
         "summary" : "Check the state and validity of the card",
-        "tags" : [ "Card" ]
+        "tags" : [ "Cards" ]
       }
     }
   },
