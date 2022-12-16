@@ -47,3 +47,13 @@ To start app, make sure that you have necessary env variables set.
 2. Start app with firestore database `npm run start` (*make sure you have set SA key in your environment*)
 3. Start app with firestore emulator `npm run start:firestore:emulator`
 (*with firestore emulators stored data will be deleted after you shut down the app*)
+
+## 🧪 Run tests
+
+1. Install dependencies `npm run ci`
+2. Build the app `npm run build`
+3. Set `ENABLE_TESTS` to `true` or `1`
+```bash
+export ENABLE_TESTS=1
+```
+4. Run tests `npm run test`
