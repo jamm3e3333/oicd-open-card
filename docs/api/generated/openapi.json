@@ -1,0 +1,405 @@
+{
+  "openapi" : "3.0.2",
+  "info" : {
+    "description" : "Application for checking the card state and validity\n# Error codes\n\n### Description of codes for `422 Unprocessable entity` responses\n\n| Code | Description |\n|---|---|\n| U4000 | User already exists. |\n| U4001 | Invalid email. |\n| U4002 | Invalid password. Password must contain minimum eight characters, must have at least one uppercase letter, one lowercase letter, at least one number and no special character. |\n| C4000 | Invalid card number. Card number must be integer. |\n| C5000 | Open card service unavailable. |\n",
+    "title" : "OICD open card",
+    "version" : "1.0.0"
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "paths" : {
+    "/api/v1/sessions" : {
+      "post" : {
+        "operationId" : "createSession",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/createSession_request"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/createSession_200_response"
+                }
+              }
+            },
+            "description" : "ok"
+          },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HttpError"
+                }
+              }
+            },
+            "description" : "Request not processed - bad_request"
+          },
+          "401" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HttpError"
+                }
+              }
+            },
+            "description" : "Unauthorized access"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HttpError"
+                }
+              }
+            },
+            "description" : "Entity not found - not_found"
+          }
+        },
+        "summary" : "Login user and obtain a JWT token",
+        "tags" : [ "Sessions" ]
+      }
+    },
+    "/api/v1/users" : {
+      "post" : {
+        "operationId" : "createUser",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/createSession_request"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/createSession_200_response"
+                }
+              }
+            },
+            "description" : "ok"
+          },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HttpError"
+                }
+              }
+            },
+            "description" : "Request not processed - bad_request"
+          },
+          "422" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/createUser_422_response"
+                }
+              }
+            },
+            "description" : "Invalid data"
+          }
+        },
+        "summary" : "Create a new user",
+        "tags" : [ "Users" ]
+      }
+    },
+    "/api/v1/cards/{cardNumber}:checkCardState" : {
+      "get" : {
+        "operationId" : "checkCardState",
+        "parameters" : [ {
+          "description" : "Unique card number.",
+          "explode" : false,
+          "in" : "path",
+          "name" : "cardNumber",
+          "required" : true,
+          "schema" : {
+            "example" : 10932482038,
+            "type" : "number"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/checkCardState_200_response"
+                }
+              }
+            },
+            "description" : "ok"
+          },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HttpError"
+                }
+              }
+            },
+            "description" : "Request not processed - bad_request"
+          },
+          "401" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HttpError"
+                }
+              }
+            },
+            "description" : "Unauthorized access"
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HttpError"
+                }
+              }
+            },
+            "description" : "Unauthorized access"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/HttpError"
+                }
+              }
+            },
+            "description" : "Entity not found - not_found"
+          },
+          "422" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/checkCardState_422_response"
+                }
+              }
+            },
+            "description" : "Invalid data"
+          }
+        },
+        "security" : [ {
+          "bearer" : [ ]
+        } ],
+        "summary" : "Check the state and validity of the card",
+        "tags" : [ "Card" ]
+      }
+    }
+  },
+  "components" : {
+    "responses" : {
+      "UnauthorizedErrorResponse" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/HttpError"
+            }
+          }
+        },
+        "description" : "Unauthorized access"
+      },
+      "NotAuthenticatedErrorResponse" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/HttpError"
+            }
+          }
+        },
+        "description" : "Unauthorized access"
+      },
+      "BadRequestErrorResponse" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/HttpError"
+            }
+          }
+        },
+        "description" : "Request not processed - bad_request"
+      },
+      "NotFoundErrorResponse" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/HttpError"
+            }
+          }
+        },
+        "description" : "Entity not found - not_found"
+      }
+    },
+    "schemas" : {
+      "HttpError" : {
+        "properties" : {
+          "message" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "number"
+          },
+          "errorCode" : {
+            "type" : "string"
+          },
+          "errorData" : {
+            "$ref" : "#/components/schemas/HttpError_errorData"
+          },
+          "errorClass" : {
+            "type" : "string"
+          },
+          "stack" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "U4000" : {
+        "properties" : {
+          "code" : {
+            "example" : "U4000",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "U4001" : {
+        "properties" : {
+          "code" : {
+            "example" : "U4001",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "U4002" : {
+        "properties" : {
+          "code" : {
+            "example" : "U4002",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "C4000" : {
+        "properties" : {
+          "code" : {
+            "example" : "C4000",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "C5000" : {
+        "properties" : {
+          "code" : {
+            "example" : "C5000",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "createSession_request_user" : {
+        "properties" : {
+          "name" : {
+            "example" : "john@doe.com",
+            "type" : "string"
+          },
+          "passwd" : {
+            "example" : "myPassword",
+            "type" : "string"
+          }
+        },
+        "required" : [ "name", "passwd" ],
+        "type" : "object"
+      },
+      "createSession_request" : {
+        "properties" : {
+          "user" : {
+            "$ref" : "#/components/schemas/createSession_request_user"
+          }
+        },
+        "required" : [ "user" ],
+        "type" : "object"
+      },
+      "createSession_200_response" : {
+        "properties" : {
+          "token" : {
+            "example" : "caeb2a6a-bd1d-41cc-bfdf-5d4514ace591",
+            "type" : "string"
+          }
+        },
+        "required" : [ "token" ],
+        "type" : "object"
+      },
+      "createUser_422_response" : {
+        "anyOf" : [ {
+          "$ref" : "#/components/schemas/U4000"
+        }, {
+          "$ref" : "#/components/schemas/U4001"
+        }, {
+          "$ref" : "#/components/schemas/U4002"
+        } ]
+      },
+      "checkCardState_200_response_card" : {
+        "properties" : {
+          "validUntil" : {
+            "format" : "Date",
+            "type" : "string"
+          },
+          "state" : {
+            "example" : "valid",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "checkCardState_200_response" : {
+        "properties" : {
+          "card" : {
+            "$ref" : "#/components/schemas/checkCardState_200_response_card"
+          }
+        },
+        "type" : "object"
+      },
+      "checkCardState_422_response" : {
+        "anyOf" : [ {
+          "$ref" : "#/components/schemas/C4000"
+        }, {
+          "$ref" : "#/components/schemas/C5000"
+        } ]
+      },
+      "HttpError_errorData" : {
+        "properties" : {
+          "message" : {
+            "type" : "string"
+          },
+          "code" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      }
+    },
+    "securitySchemes" : {
+      "bearer" : {
+        "bearerFormat" : "JWT",
+        "scheme" : "bearer",
+        "type" : "http"
+      }
+    }
+  }
+}
