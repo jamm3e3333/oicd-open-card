@@ -1,3 +1,5 @@
+docs/api/generated/**/*
+!docs/api/generated/*.json
 .vscode
 dist
 tsconfig.tsbuildinfo
