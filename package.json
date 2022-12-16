@@ -10,6 +10,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node -r source-map-support/register dist/index.js",
+    "start:firestore:emulator": "NODE_ENV=development IS_FIRESTORE_EMULATOR_USE=true firebase emulators:exec --only firestore \"npm start\"",
     "build:watch": "tsc --watch",
     "start-lr": "tsc-watch --onSuccess \"npm run start\"",
     "build:docs": "openapi-typescript docs/api/openapi.yaml --output src/openapi-gen/api-openapi.ts",
@@ -28,6 +29,7 @@
   "homepage": "https://github.com/jamm3e3333/oicd-open-card#readme",
   "dependencies": {
     "@google-cloud/firestore": "^6.4.1",
+    "axios": "^1.2.1",
     "configuru": "^0.6.2",
     "cors": "^2.8.5",
     "cosmas": "^3.3.3",
@@ -42,6 +44,7 @@
   },
   "devDependencies": {
     "@ackee/styleguide-backend-config": "^0.3.7",
+    "@types/axios": "^0.14.0",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.14",
     "@types/jest": "^29.2.4",
