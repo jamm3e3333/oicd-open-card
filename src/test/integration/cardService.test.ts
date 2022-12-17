@@ -52,7 +52,7 @@ describe('Card state', () => {
     })
     const response = await testing
       .request()
-      .get(`/api/v1/cards/9.3242:checkCardState`)
+      .get('/api/v1/cards/9.3242:checkCardState')
       .set(testing.setBearer({ user: { id, name } }))
 
     cardRequestSpyOn.resetMock()
@@ -64,7 +64,7 @@ describe('Card state', () => {
     })
     const response = await testing
       .request()
-      .get(`/api/v1/cards/9.3242:checkCardState`)
+      .get('/api/v1/cards/9.3242:checkCardState')
 
     cardRequestSpyOn.resetMock()
     expect(response.statusCode).toEqual(401)
