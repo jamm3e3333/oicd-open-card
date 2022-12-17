@@ -24,8 +24,8 @@ export const createUser = async (
   const userHashContext = await util.hashPassword(password)
   const createdUser: { id: string } | userRepository.User =
     await userRepository.createUser({
-      hash: userHashContext.hash,
-      salt: userHashContext.salt,
+      hash: userHashContext.hash!,
+      salt: userHashContext.salt!,
       name: user?.name ?? generateRandomString(5),
     })
   return {
@@ -38,7 +38,7 @@ export const createUser = async (
  *
  * @param stringLength default str length is 5
  */
-export const generateRandomString = (stringLength = 5) =>
+export const generateRandomString = (stringLength: number = 5) =>
   crypto.randomBytes(stringLength <= 0 ? 1 : stringLength).toString('hex')
 
 export const generateRandomPassword = () => `Ah9${generateRandomString()}`

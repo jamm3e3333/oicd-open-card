@@ -36,10 +36,7 @@ export const verifyToken = async (token: string, secret: string) => {
   }
 }
 
-export const getBearerToken = (authorizationHeader?: string) => {
-  if (!authorizationHeader) {
-    return undefined
-  }
+export const getBearerToken = (authorizationHeader: string) => {
   const [bearer, accessToken] = authorizationHeader.split(' ')
   if (!bearer || bearer.toLowerCase() !== 'bearer') {
     return

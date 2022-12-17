@@ -83,7 +83,7 @@ const cardRequest = async <TBody>(
     statusCode: response.statusCode,
     status: response.status,
     url: param.url,
-    ...(param.param !== undefined && { pathParameters: param.param }),
+    ...(param.param && { pathParameters: param.param }),
     method: param.method ?? 'get',
   })
   throw new Error('OpenCard API error.')

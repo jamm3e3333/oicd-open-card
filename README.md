@@ -9,18 +9,15 @@ Find the API documentation [here](./docs/api/openapi.yaml) written in swagger, c
 Or run the application and visit the path `/api/v1/docs` in the browser.
 
 ## 🚀 Project setup
-
 1. Install [NodeJS](https://nodejs.org/en/download/) and use the node version according to ['.nvmrc'](./.nvmrc)
 2. Install npm dependencies `npm run ci`
 3. Create firestore database or run app with firestore emulator
-
-- to work with real firestore database create service account key and add it to the env vars:
-
-```json
-  ...
-  "SERVICE_ACCOUNT": "...",
-  ...
-```
+  - to work with real firestore database create service account key and add it to the env vars:
+  ```json
+    ...
+    "SERVICE_ACCOUNT": "...",
+    ...
+  ```
 
 ## 🔧 Configuration
 
@@ -47,18 +44,16 @@ export CFG_JSON_PATH=~/secrets/dotenv-api.json
 To start app, make sure that you have necessary env variables set.
 
 1. Build the app `npm run build`
-2. Start app with firestore database `npm run start` (_make sure you have set SA key in your environment_)
+2. Start app with firestore database `npm run start` (*make sure you have set SA key in your environment*)
 3. Start app with firestore emulator `npm run start:firestore:emulator`
-   (_with firestore emulators stored data will be deleted after you shut down the app_)
+(*with firestore emulators stored data will be deleted after you shut down the app*)
 
 ## 🧪 Run tests
 
 1. Install dependencies `npm run ci`
 2. Build the app `npm run build`
 3. Set `ENABLE_TESTS` to `true` or `1`
-
 ```bash
 export ENABLE_TESTS=1
 ```
-
 4. Run tests `npm run test`
