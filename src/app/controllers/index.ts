@@ -11,7 +11,6 @@ const pipeMiddleware = (...middlewares: RequestHandler[]) => {
   return router
 }
 
-/* eslint-disable @typescript-eslint/no-misused-promises */
 const bindMiddleware: RequestHandler = async (req, res, next) => {
   try {
     req.context = await createHttpCtx({ req, res })
@@ -20,7 +19,6 @@ const bindMiddleware: RequestHandler = async (req, res, next) => {
     next(error)
   }
 }
-/* eslint-enable @typescript-eslint/no-misused-promises */
 
 export type HttpContext = util.Unpromise<ReturnType<typeof createHttpCtx>>
 
@@ -37,10 +35,10 @@ const getBaseUrl = (req: Request) => {
 
 const createHttpCtx = async (httpContext: { req: Request; res: Response }) => {
   const { req } = httpContext
-  const user = await authenticateToken(
-    getBearerToken(req.headers.authorization)
-  )
-  const authenticated = !(user == null)
+  let user = req.headers.authorization
+    ? await authenticateToken(getBearerToken(req.headers.authorization))
+    : undefined
+  let authenticated = !!user
 
   return {
     user,
@@ -67,7 +65,6 @@ export const service = (
   serviceHandler: ServiceHandler,
   options = { noContent: false }
 ) =>
-  /* eslint-disable-next-line @typescript-eslint/no-misused-promises */
   pipeMiddleware(bindMiddleware, async (req, res, next) => {
     try {
       const responseBody = await serviceHandler(req.context)
