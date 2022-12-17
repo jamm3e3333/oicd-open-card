@@ -1,7 +1,7 @@
 import logger from 'cosmas'
 import config from '../config'
 
-let baseLogger = logger({
+const baseLogger = logger({
   ...config.logger,
 })
 
