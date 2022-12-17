@@ -1,0 +1,3 @@
+src/openapi-gen/api-openapi.ts
+docs/api/generated
+dist
