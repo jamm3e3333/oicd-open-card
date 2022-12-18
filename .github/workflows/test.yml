@@ -128,7 +128,5 @@ jobs:
             cd ~/oicd-app/oicd-open-card
             git checkout master
             git pull
-            docker-compose pull
-            docker-compose build
             docker-compose up -d
 
