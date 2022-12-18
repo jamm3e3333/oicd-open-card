@@ -21,14 +21,10 @@ jobs:
         run: echo "${{ steps.branch-name.outputs.current_branch }}"
       - name: Deploy to DigitalOcean Droplet
         if: steps.branch-name.outputs.current_branch == 'master'
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{secrets.HOST}}
-          username: ${{secrets.USERNAME}}
-          key: ${{secrets.KEY}}
-          script: |
-            cd /home/github/oicd-app/oicd-open-card
-            git checkout master
-            git pull
-            docker-compsoe build
-            docker-compose up
+        run: \
+          ssh -i ${{ secrets.KEY }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} && \
+          cd /home/github/oicd-app/oicd-open-card && \
+          git checkout master && \
+          git pull && \
+          docker-compose build && \
+          docker-compose up
