@@ -125,6 +125,12 @@ jobs:
           username: ${{ env.USERNAME }}
           key: ${{ env.KEY }}
           script: |
+            export SERVICE_ACCOUNT=${{ secrets.SERVICE_ACCOUNT }}
+            export JWT_SECRET=${{ secrets.JWT_SECRET }}
+            export OPEN_CARD_API_KEY=${{ secrets.OPEN_CARD_API_KEY }}
+            export OPEN_CARD_BASE_URL= ${{ secrets.OPEN_CARD_BASE_URL }}
+            export DOCKER_IMAGE_NAME=${{ secrets.DOCKER_IMAGE_NAME }}
+            export NODE_ENV=production
             cd ~/oicd-app/oicd-open-card
             git checkout master
             git pull
