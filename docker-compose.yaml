@@ -1,0 +1,19 @@
+version: "3"
+services:
+    node-app:
+        build:
+          context: .
+          dockerfile: ./Dockerfile
+        ports:
+          - "3000:3000"
+        environment:
+          - NODE_ENV=${NODE_ENV}
+          - LOGGER_PRETTY=false
+          - JWT_SECRET=${JWT_SECRET}
+          - SERVICE_ACCOUNT=${SERVICE_ACCOUNT}
+          - ENABLE_TESTS=false
+          - IS_FIRESTORE_EMULATOR_USE=false
+          - OPEN_CARD_API_KEY=${OPEN_CARD_API_KEY}
+          - OPEN_CARD_BASE_URL=${OPEN_CARD_BASE_URL}
+        image: '$DOCKER_IMAGE_NAME'
+        user: root
