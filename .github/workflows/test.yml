@@ -116,7 +116,7 @@ jobs:
         id: branch-name
         uses: tj-actions/branch-names@v6
       - name: Print branch name
-        run: echo "${{ steps.branch-name.outputs.current_branch }} ${{ env.KEY }}"
+        run: echo "${{ steps.branch-name.outputs.current_branch }}"
       - name: Deploy to DigitalOcean Droplet
         if: steps.branch-name.outputs.current_branch == 'master'
         uses: appleboy/ssh-action@master
@@ -125,6 +125,10 @@ jobs:
           username: ${{ env.USERNAME }}
           key: ${{ env.KEY }}
           script: |
-            export NVM_DIR=~/.nvm
-            source ~/.nvm/nvm.sh
+            cd ~/oicd-app/oicd-open-card
+            git checkout master
+            git pull
+            docker-compose pull
+            docker-compose build
+            docker-compose up
 
