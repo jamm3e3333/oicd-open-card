@@ -4,11 +4,6 @@ on:
 jobs:
   deploy:
     env:
-      NODE_ENV: production
-      OPEN_CARD_API_KEY: ${{ secrets.OPEN_CARD_API_KEY }}
-      OPEN_CARD_BASE_URL: ${{ secrets.OPEN_CARD_BASE_URL }}
-      SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
       HOST: ${{ secrets.HOST }}
       USERNAME: ${{ secrets.USERNAME }}
       KEY: ${{ secrets.KEY }}
@@ -21,10 +16,11 @@ jobs:
         run: echo "${{ steps.branch-name.outputs.current_branch }}"
       - name: Deploy to DigitalOcean Droplet
         if: steps.branch-name.outputs.current_branch == 'master'
-        run: \
-          ssh -i ${{ secrets.KEY }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} && \
-          cd /home/github/oicd-app/oicd-open-card && \
-          git checkout master && \
-          git pull && \
-          docker-compose build && \
-          docker-compose up
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.HOST }}
+          username: ${{ env.USERNAME }}
+          key: ${{ env.KEY }}
+          script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
