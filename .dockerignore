@@ -1,0 +1,11 @@
+.editorconfig
+.git
+.npm
+.github
+.vscode
+README.md
+dist
+docker-compose.*
+docs-output
+node_modules
+prettier.config.js
