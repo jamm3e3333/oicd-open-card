@@ -1,8 +1,29 @@
 name: Test
-on: [push, workflow_dispatch]
+on:
+  pull_request:
+    types: [opened, edited, reopened]
+    branches:
+      - 'master'
+      - 'feat/**'
+      - 'feature/**'
+      - 'fix/**'
+  workflow_dispatch:
+  push:
+    branches:
+      - 'master'
+      - 'feat/**'
+      - 'feature/**'
+      - 'fix/**'
+      - 'ci/**'
+    paths-ignore:
+      - '**/*.md'
+      - '.github/workflows'
+      - '.gitignore'
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
+    outputs:
+      lint-output: ${{ steps.lint.outputs.lint-output }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -10,12 +31,80 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: Install
+      - uses: actions/cache@v3
+        id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Lint
+        id: ci-lint
+        run: npm run ci-lint
+      - name: Upload failed lint report
+        if: failure() && steps.ci-lint.outcome == 'failure'
+        uses: actions/upload-artifact@v3
+        with:
+          name: checkstyle-result
+          path: ./output/checkstyle-result.xml
+      - name: Print lint output
+        id: lint
+        run: find output/checkstyle-result.xml -type f -execdir echo 'lint-output={}' >> $GITHUB_OUTPUT ';'
+  build:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        if: steps.npm-cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Build
         run: npm run build
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-files
+          path: ./dist
+  test:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: npm ci
       - name: Test
         env:
           ENABLE_TESTS: true
-        run: npm run test
-        
+        run: npm run ci-test
+  deploy:
+    needs: [test, build]
+    uses: './.github/workflows/reusable-deploy.yml'
+

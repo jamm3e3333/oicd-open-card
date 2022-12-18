@@ -1,0 +1,21 @@
+name: Deploy
+on: 
+  workflow_call:
+jobs:
+  deploy:
+    env:
+      NODE_ENV: production
+      OPEN_CARD_API_KEY: ${{ secrets.OPEN_CARD_API_KEY }}
+      OPEN_CARD_BASE_URL: ${{ secrets.OPEN_CARD_BASE_URL }}
+      SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v6
+      - name: Print branch name
+        run: echo "${{ steps.branch-name.outputs.current_branch }}"
+      - name: Checkout
+        if: steps.branch-name.outputs.current_branch == 'master'
+        uses: actions/checkout@v3
