@@ -6,7 +6,7 @@ jobs:
     env:
       HOST: ${{ secrets.HOST }}
       USERNAME: ${{ secrets.USERNAME }}
-      KEY: ${{ secrets.KEY }}
+      INPUT_PASSWORD: ${{ secrets.INPUT_PASSWORD }}
     runs-on: ubuntu-latest
     steps:
       - name: Get branch name
@@ -20,7 +20,7 @@ jobs:
         with:
           host: ${{ env.HOST }}
           username: ${{ env.USERNAME }}
-          key: ${{ env.KEY }}
+          password: ${{ env.INPUT_PASSWORD }}
           script: |
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
