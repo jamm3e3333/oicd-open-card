@@ -9,6 +9,9 @@ jobs:
       OPEN_CARD_BASE_URL: ${{ secrets.OPEN_CARD_BASE_URL }}
       SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      HOST: ${{ secrets.HOST }}
+      USERNAME: ${{ secrets.USERNAME }}
+      KEY: ${{ secrets.KEY }}
     runs-on: ubuntu-latest
     steps:
       - name: Get branch name
@@ -16,6 +19,16 @@ jobs:
         uses: tj-actions/branch-names@v6
       - name: Print branch name
         run: echo "${{ steps.branch-name.outputs.current_branch }}"
-      - name: Checkout
+      - name: Deploy to DigitalOcean Droplet
         if: steps.branch-name.outputs.current_branch == 'master'
-        uses: actions/checkout@v3
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.HOST}}
+          username: ${{secrets.USERNAME}}
+          key: ${{secrets.KEY}}
+          script: |
+            cd /home/github/oicd-app/oicd-open-card
+            git checkout master
+            git pull
+            docker-compsoe build
+            docker-compose up
