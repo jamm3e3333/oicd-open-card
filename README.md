@@ -6,7 +6,7 @@ App for checking card status and validity for users.
 
 Find the API documentation [here](./docs/api/openapi.yaml) written in swagger, copy the file to [Swagger editor](https://editor.swagger.io/?_ga=2.245618116.1359773802.1671205457-100018630.1670623569).
 
-Or run the application and visit the path `/api/v1/docs` in the browser.
+Or run the application and visit the path `/api/v1/docs` in the browser or visi [apiDocs](http://jakubvala.co).
 
 ## 🚀 Project setup
 
